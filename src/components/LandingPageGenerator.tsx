@@ -671,15 +671,22 @@ Quiero que mejores y reescribas los textos de mi Landing Page para que sea "de o
       logoLoading.classList.remove('hidden');
       logoLoading.classList.add('flex');
 
-      const name = document.getElementById('logoNameInput').value.trim();
+      const name = document.getElementById('logoNameInput').value.trim() || 'Brand';
       const style = document.getElementById('logoStyleSelect').value;
       const color = document.getElementById('logoColorSelect').value;
       const seed = Math.floor(Math.random() * 1000000);
 
-      const prompt = "minimalist clean vector logo for " + name + ", style " + style + ", color " + color + ", white background, high resolution";
-      const encodedPrompt = encodeURIComponent(prompt);
+      // Map our select styles to free Dicebear styles
+      let dicebearStyle = "shapes";
+      if (style.includes("tech")) dicebearStyle = "bottts";
+      else if (style.includes("corporate")) dicebearStyle = "initials";
+      else if (style.includes("retro")) dicebearStyle = "rings";
+      else if (style.includes("playful")) dicebearStyle = "fun-emoji";
+
+      const seedName = encodeURIComponent(name + "-" + seed);
       
-      currentLogoUrl = "https://image.pollinations.ai/prompt/" + encodedPrompt + "?seed=" + seed + "&width=512&height=512&nologo=true";
+      // Construir URL de la API de Dicebear (rápida, gratuita y estable para generar SVG vectoriales)
+      currentLogoUrl = "https://api.dicebear.com/9.x/" + dicebearStyle + "/svg?seed=" + seedName;
 
       logoPreviewImg.onload = () => {
         logoLoading.classList.add('hidden');
