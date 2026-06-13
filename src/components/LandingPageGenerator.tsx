@@ -5,6 +5,7 @@ import {
   Settings, 
   Download, 
   Copy, 
+  CheckCircle,
   Wand2,
   Key,
   Loader2,
@@ -397,17 +398,24 @@ Quiero que mejores y reescribas los textos de mi Landing Page para que sea "de o
             <h3 className="text-sm font-semibold text-purple-400 uppercase tracking-wider flex items-center gap-2">
               <Key size={16} /> IA Enhancer Config
             </h3>
-            <div>
-              <label className="block text-xs font-medium text-slate-400 mb-1">Google Gemini API Key</label>
-              <input 
-                type="password" 
-                value={apiKey}
-                onChange={(e) => setApiKey(e.target.value)}
-                placeholder="Pega tu API Key de Gemini aquí..."
-                className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all text-purple-200"
-              />
-              <p className="text-[10px] text-slate-500 mt-1">Tu clave no se guarda, se usa localmente. Gemini 2.5 Flash soporta análisis de imágenes.</p>
-            </div>
+            {import.meta.env.VITE_GEMINI_API_KEY ? (
+              <div className="bg-green-500/10 border border-green-500/20 text-green-400 px-4 py-3 rounded-lg text-xs font-medium flex items-center gap-2">
+                <CheckCircle size={14} />
+                Conectado de forma segura vía Variables de Entorno.
+              </div>
+            ) : (
+              <div>
+                <label className="block text-xs font-medium text-slate-400 mb-1">Google Gemini API Key</label>
+                <input 
+                  type="password" 
+                  value={apiKey}
+                  onChange={(e) => setApiKey(e.target.value)}
+                  placeholder="Pega tu API Key de Gemini aquí..."
+                  className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all text-purple-200"
+                />
+                <p className="text-[10px] text-slate-500 mt-1">Tu clave no se guarda, se usa localmente. Gemini 2.5 Flash soporta análisis de imágenes.</p>
+              </div>
+            )}
           </div>
 
           <div className="space-y-4 p-4 bg-slate-900/50 rounded-xl border border-slate-700/50">
