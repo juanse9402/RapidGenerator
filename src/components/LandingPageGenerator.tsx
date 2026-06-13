@@ -210,7 +210,7 @@ Quiero que mejores y reescribas los textos de mi Landing Page para que sea "de o
     <nav class="hidden md:flex gap-8 items-center">
       <a href="#features" class="text-sm font-semibold text-slate-600 hover:${theme.primary} transition-colors">Características</a>
       ${productImages.length > 0 ? `<a href="#gallery" class="text-sm font-semibold text-slate-600 hover:${theme.primary} transition-colors">Galería</a>` : ''}
-      <a href="#pricing" class="text-sm font-semibold text-slate-600 hover:${theme.primary} transition-colors">Precios</a>
+      <a href="#how-it-works" class="text-sm font-semibold text-slate-600 hover:${theme.primary} transition-colors">Cómo Funciona</a>
       <a href="#testimonials" class="text-sm font-semibold text-slate-600 hover:${theme.primary} transition-colors">Testimonios</a>
       <a href="#faq" class="text-sm font-semibold text-slate-600 hover:${theme.primary} transition-colors">FAQ</a>
       <button onclick="openModal()" class="px-5 py-2.5 text-sm font-bold rounded-full shadow-md transition-all transform hover:-translate-y-0.5 hover:shadow-lg ${theme.button}">${ctaText}</button>
@@ -224,7 +224,7 @@ Quiero que mejores y reescribas los textos de mi Landing Page para que sea "de o
   <div id="mobileMenu" class="hidden md:hidden fixed inset-0 z-30 bg-white pt-20 px-6 flex-col gap-6 shadow-xl border-b border-slate-200">
     <a href="#features" onclick="toggleMenu()" class="text-lg font-semibold text-slate-800 hover:${theme.primary}">Características</a>
     ${productImages.length > 0 ? `<a href="#gallery" onclick="toggleMenu()" class="text-lg font-semibold text-slate-800 hover:${theme.primary}">Galería</a>` : ''}
-    <a href="#pricing" onclick="toggleMenu()" class="text-lg font-semibold text-slate-800 hover:${theme.primary}">Precios</a>
+    <a href="#how-it-works" onclick="toggleMenu()" class="text-lg font-semibold text-slate-800 hover:${theme.primary}">Cómo Funciona</a>
     <a href="#testimonials" onclick="toggleMenu()" class="text-lg font-semibold text-slate-800 hover:${theme.primary}">Testimonios</a>
     <a href="#faq" onclick="toggleMenu()" class="text-lg font-semibold text-slate-800 hover:${theme.primary}">Preguntas Frecuentes</a>
     <button onclick="openModal(); toggleMenu()" class="mt-4 px-6 py-4 text-base font-bold rounded-xl shadow-lg ${theme.button} w-full">${ctaText}</button>
@@ -308,49 +308,47 @@ Quiero que mejores y reescribas los textos de mi Landing Page para que sea "de o
   </section>
   ` : ''}
 
-  <!-- Pricing Section -->
-  <section id="pricing" class="w-full py-24 px-6 md:px-12 bg-white border-t border-slate-100">
+  <!-- How It Works Section -->
+  <section id="how-it-works" class="w-full py-24 px-6 md:px-12 bg-white border-t border-slate-100">
     <div class="max-w-6xl mx-auto">
       <div class="text-center mb-16">
-        <h2 class="text-4xl md:text-5xl font-black tracking-tight mb-4">Planes Simples y Transparentes</h2>
-        <p class="text-xl text-slate-600">Comienza gratis y mejora cuando tu negocio lo necesite.</p>
+        <h2 class="text-4xl md:text-5xl font-black tracking-tight mb-4">¿Cómo Funciona?</h2>
+        <p class="text-xl text-slate-600">Un proceso sencillo en 3 pasos para alcanzar tus metas.</p>
       </div>
-      <div class="grid md:grid-cols-3 gap-8 items-center">
-        <!-- Basic -->
-        <div class="p-8 rounded-3xl border border-slate-200 bg-white flex flex-col h-full">
-          <h3 class="text-xl font-bold mb-2">Básico</h3>
-          <p class="text-slate-500 mb-6 text-sm">Perfecto para empezar</p>
-          <div class="text-4xl font-black mb-8">$0<span class="text-lg text-slate-400 font-medium">/mes</span></div>
-          <ul class="space-y-4 mb-8 flex-1">
-            <li class="flex items-center gap-2 text-sm text-slate-700"><svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Acceso a características base</li>
-            <li class="flex items-center gap-2 text-sm text-slate-700"><svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Soporte de la comunidad</li>
-          </ul>
-          <button onclick="openModal()" class="w-full py-3 px-4 font-bold rounded-xl border-2 border-slate-200 text-slate-700 hover:bg-slate-50 transition-colors">Comenzar Gratis</button>
+      <div class="grid md:grid-cols-3 gap-8 relative">
+        <!-- Connecting Line for Desktop -->
+        <div class="hidden md:block absolute top-1/2 left-[10%] right-[10%] h-0.5 bg-slate-100 -translate-y-1/2 z-0"></div>
+        
+        <!-- Step 1 -->
+        <div class="relative z-10 p-8 rounded-3xl border border-slate-200 bg-white shadow-xl flex flex-col items-center text-center transform transition-transform hover:-translate-y-2">
+          <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-6 bg-slate-50 border-2 border-slate-100 text-slate-700">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg>
+          </div>
+          <h3 class="text-2xl font-bold mb-3 text-slate-900">Paso 1: Regístrate</h3>
+          <p class="text-slate-600">Crea tu cuenta gratuita en menos de 1 minuto y accede a nuestra plataforma sin compromisos.</p>
         </div>
-        <!-- Pro -->
-        <div class="p-8 rounded-3xl border-2 ${theme.border} ${theme.bg} flex flex-col h-full relative transform md:-translate-y-4 shadow-xl">
-          <div class="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full text-xs font-bold text-white uppercase tracking-wider ${theme.button}">Más Popular</div>
-          <h3 class="text-xl font-bold mb-2 text-slate-900">Pro</h3>
-          <p class="text-slate-600 mb-6 text-sm">Para equipos en crecimiento</p>
-          <div class="text-4xl font-black mb-8 text-slate-900">$29<span class="text-lg text-slate-500 font-medium">/mes</span></div>
-          <ul class="space-y-4 mb-8 flex-1">
-            <li class="flex items-center gap-2 text-sm text-slate-800"><svg class="w-5 h-5 ${theme.primary}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Todo lo del plan Básico</li>
-            <li class="flex items-center gap-2 text-sm text-slate-800"><svg class="w-5 h-5 ${theme.primary}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Funciones Premium</li>
-            <li class="flex items-center gap-2 text-sm text-slate-800"><svg class="w-5 h-5 ${theme.primary}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Soporte Prioritario 24/7</li>
-          </ul>
-          <button onclick="openModal()" class="w-full py-3 px-4 font-bold rounded-xl shadow-md transition-transform hover:-translate-y-1 ${theme.button}">Obtener Pro</button>
+
+        <!-- Step 2 -->
+        <div class="relative z-10 p-8 rounded-3xl border-2 ${theme.border} ${theme.bg} shadow-xl flex flex-col items-center text-center transform transition-transform hover:-translate-y-2">
+          <div class="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full text-xs font-bold text-white uppercase tracking-wider ${theme.button}">Rápido y Fácil</div>
+          <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-6 bg-white shadow-sm ${theme.primary}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+          </div>
+          <h3 class="text-2xl font-bold mb-3 text-slate-900">Paso 2: Configura</h3>
+          <p class="text-slate-800">Personaliza tus preferencias y ajusta la herramienta para que se adapte perfectamente a tus necesidades.</p>
         </div>
-        <!-- Enterprise -->
-        <div class="p-8 rounded-3xl border border-slate-200 bg-white flex flex-col h-full">
-          <h3 class="text-xl font-bold mb-2">Enterprise</h3>
-          <p class="text-slate-500 mb-6 text-sm">Para grandes empresas</p>
-          <div class="text-4xl font-black mb-8 text-slate-900">A medida</div>
-          <ul class="space-y-4 mb-8 flex-1">
-            <li class="flex items-center gap-2 text-sm text-slate-700"><svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Infraestructura dedicada</li>
-            <li class="flex items-center gap-2 text-sm text-slate-700"><svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> SLAs Personalizados</li>
-          </ul>
-          <button onclick="openModal()" class="w-full py-3 px-4 font-bold rounded-xl border-2 border-slate-200 text-slate-700 hover:bg-slate-50 transition-colors">Contactar Ventas</button>
+
+        <!-- Step 3 -->
+        <div class="relative z-10 p-8 rounded-3xl border border-slate-200 bg-white shadow-xl flex flex-col items-center text-center transform transition-transform hover:-translate-y-2">
+          <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-6 bg-slate-50 border-2 border-slate-100 text-slate-700">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+          <h3 class="text-2xl font-bold mb-3 text-slate-900">Paso 3: Resultados</h3>
+          <p class="text-slate-600">Siéntate y observa cómo tu productividad se dispara y alcanzas tus objetivos sin esfuerzo.</p>
         </div>
+      </div>
+      <div class="mt-16 flex justify-center">
+        <button onclick="openModal()" class="px-10 py-5 text-lg font-bold rounded-full shadow-2xl transition-all transform hover:scale-105 ${theme.button}">${ctaText}</button>
       </div>
     </div>
   </section>
