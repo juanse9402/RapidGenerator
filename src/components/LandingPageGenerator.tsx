@@ -776,7 +776,7 @@ Quiero que mejores y reescribas los textos de mi Landing Page para que sea "de o
                   <input type="file" accept="image/*" multiple onChange={handleImageUpload} className="hidden" />
                 </label>
               </div>
-              <p className="text-[10px] text-slate-500">Sube fotos. La IA las "mirará", entenderá tu producto, y creará una sección exclusiva de Galería en la Landing Page describiendo lo que ve.</p>
+              <p className="text-[10px] text-slate-500">Sube fotos. La IA las revisara, entenderá tu producto, y creará una sección exclusiva de Galería en la Landing Page describiendo lo que ve.</p>
             </div>
           </div>
 
