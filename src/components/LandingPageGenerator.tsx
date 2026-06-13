@@ -51,7 +51,7 @@ export default function LandingPageGenerator() {
   const [imageSectionText, setImageSectionText] = useState('Mira de cerca lo que hacemos. Nuestra calidad y atención al detalle saltan a la vista.');
 
   // AI Enhancer States
-  const [apiKey, setApiKey] = useState('');
+  const [apiKey, setApiKey] = useState(import.meta.env.VITE_GEMINI_API_KEY || '');
   const [isGenerating, setIsGenerating] = useState(false);
 
   const theme = colorThemes[colorPalette] || colorThemes['blue'];
