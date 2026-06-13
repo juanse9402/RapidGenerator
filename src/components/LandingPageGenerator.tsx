@@ -55,7 +55,24 @@ export default function LandingPageGenerator() {
   const [apiKey, setApiKey] = useState(import.meta.env.VITE_GEMINI_API_KEY || '');
   const [isGenerating, setIsGenerating] = useState(false);
 
+  // AI Logo Generator States
+  const [logoStyle, setLogoStyle] = useState('shapes');
+  const [isGeneratingLogo, setIsGeneratingLogo] = useState(false);
+
   const theme = colorThemes[colorPalette] || colorThemes['blue'];
+
+  const handleGenerateLogo = () => {
+    setIsGeneratingLogo(true);
+    const seed = Math.floor(Math.random() * 1000000);
+    const seedName = encodeURIComponent((businessName || 'Brand') + "-" + seed);
+    const url = `https://api.dicebear.com/9.x/${logoStyle}/svg?seed=${seedName}`;
+    
+    // Simulate slight loading delay for UX
+    setTimeout(() => {
+      setLogoBase64(url);
+      setIsGeneratingLogo(false);
+    }, 600);
+  };
 
   const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -206,7 +223,6 @@ Quiero que mejores y reescribas los textos de mi Landing Page para que sea "de o
            </div>`
       }
       <span class="text-xl md:text-2xl font-bold tracking-tight">${businessName}</span>
-      <button onclick="openLogoModal()" class="hidden sm:flex items-center gap-2 px-3 py-1.5 ml-2 text-xs font-bold bg-indigo-50 text-indigo-600 rounded-full border border-indigo-100 hover:bg-indigo-100 hover:border-indigo-200 transition-colors shadow-sm">✨ Crea tu logo con IA</button>
     </div>
     <nav class="hidden md:flex gap-8 items-center">
       <a href="#features" class="text-sm font-semibold text-slate-600 hover:${theme.primary} transition-colors">Características</a>
@@ -453,71 +469,6 @@ Quiero que mejores y reescribas los textos de mi Landing Page para que sea "de o
     </div>
   </div>
 
-  <!-- AI Logo Generator Modal -->
-  <div id="logoModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full p-8 transform scale-95 transition-transform duration-300" id="logoModalContent">
-      <div class="flex justify-between items-center mb-6">
-        <h3 class="text-2xl font-black text-slate-900 flex items-center gap-2">✨ Generador de Logos</h3>
-        <button onclick="closeLogoModal()" class="text-slate-400 hover:text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-full p-2 transition-colors">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-        </button>
-      </div>
-      
-      <form id="logoForm" class="space-y-4">
-        <div>
-          <label class="block text-sm font-semibold text-slate-700 mb-2">Nombre de tu marca</label>
-          <input type="text" id="logoNameInput" required value="${businessName}" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all">
-        </div>
-        <div>
-          <label class="block text-sm font-semibold text-slate-700 mb-2">Estilo de diseño</label>
-          <select id="logoStyleSelect" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all appearance-none bg-white">
-            <option value="minimalist clean vector">Minimalista y moderno</option>
-            <option value="tech futuristic vector">Tecnológico / Futurista</option>
-            <option value="vintage retro flat design">Vintage / Retro</option>
-            <option value="elegant corporate flat">Elegante / Corporativo</option>
-            <option value="playful cartoon vector">Divertido / Amigable</option>
-          </select>
-        </div>
-        <div>
-          <label class="block text-sm font-semibold text-slate-700 mb-2">Color principal</label>
-          <select id="logoColorSelect" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all appearance-none bg-white">
-            <option value="blue">Azul</option>
-            <option value="red">Rojo</option>
-            <option value="green">Verde</option>
-            <option value="purple">Morado</option>
-            <option value="black">Negro / Oscuro</option>
-            <option value="orange">Naranja</option>
-          </select>
-        </div>
-        <button type="submit" class="w-full py-4 text-lg font-bold rounded-xl shadow-lg transition-transform hover:-translate-y-1 mt-6 flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white border-none">
-          Generar Logo con IA
-        </button>
-      </form>
-
-      <!-- Loading State -->
-      <div id="logoLoading" class="hidden flex-col items-center justify-center py-10 text-center">
-        <svg class="animate-spin h-10 w-10 text-indigo-600 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-        <h4 class="text-lg font-bold text-slate-900 mb-1" id="logoLoadingText">Diseñando magia...</h4>
-        <p class="text-slate-500 text-sm">La IA está creando un concepto único.</p>
-      </div>
-
-      <!-- Result State -->
-      <div id="logoResult" class="hidden flex-col items-center">
-        <div class="w-48 h-48 rounded-2xl overflow-hidden bg-slate-100 mb-6 border border-slate-200 shadow-inner p-4 flex items-center justify-center">
-          <img id="logoPreviewImg" src="" alt="Logo generado" class="w-full h-full object-contain mix-blend-multiply" />
-        </div>
-        <div class="flex gap-3 w-full">
-          <button type="button" onclick="generateAILogo()" class="flex-1 py-3 px-2 font-bold rounded-xl border-2 border-slate-200 text-slate-700 hover:bg-slate-50 transition-colors flex items-center justify-center gap-1 text-sm">
-            Regenerar 🔄
-          </button>
-          <button type="button" onclick="applyAILogo()" class="flex-1 py-3 px-2 font-bold rounded-xl bg-slate-900 text-white hover:bg-slate-800 transition-transform hover:-translate-y-0.5 shadow-md flex items-center justify-center gap-1 text-sm">
-            Usar Logo ✅
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <script>
     // Mobile Menu Toggle
     const mobileMenu = document.getElementById('mobileMenu');
@@ -625,106 +576,6 @@ Quiero que mejores y reescribas los textos de mi Landing Page para que sea "de o
         });
       });
     }
-
-    // --- AI Logo Generator Logic ---
-    const logoModal = document.getElementById('logoModal');
-    const logoModalContent = document.getElementById('logoModalContent');
-    const logoForm = document.getElementById('logoForm');
-    const logoLoading = document.getElementById('logoLoading');
-    const logoResult = document.getElementById('logoResult');
-    const logoPreviewImg = document.getElementById('logoPreviewImg');
-    let currentLogoUrl = '';
-
-    function openLogoModal() {
-      logoModal.classList.remove('opacity-0', 'pointer-events-none');
-      logoModalContent.classList.remove('scale-95');
-      logoModalContent.classList.add('scale-100');
-    }
-
-    function closeLogoModal() {
-      logoModal.classList.add('opacity-0', 'pointer-events-none');
-      logoModalContent.classList.remove('scale-100');
-      logoModalContent.classList.add('scale-95');
-      setTimeout(() => {
-        logoForm.style.display = 'block';
-        logoLoading.classList.add('hidden');
-        logoLoading.classList.remove('flex');
-        logoResult.classList.add('hidden');
-        logoResult.classList.remove('flex');
-        logoPreviewImg.src = '';
-      }, 300);
-    }
-
-    logoModal.addEventListener('click', (e) => {
-      if (e.target === logoModal) closeLogoModal();
-    });
-
-    logoForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      generateAILogo();
-    });
-
-    function generateAILogo() {
-      logoForm.style.display = 'none';
-      logoResult.classList.add('hidden');
-      logoResult.classList.remove('flex');
-      logoLoading.classList.remove('hidden');
-      logoLoading.classList.add('flex');
-
-      const name = document.getElementById('logoNameInput').value.trim() || 'Brand';
-      const style = document.getElementById('logoStyleSelect').value;
-      const color = document.getElementById('logoColorSelect').value;
-      const seed = Math.floor(Math.random() * 1000000);
-
-      // Map our select styles to free Dicebear styles
-      let dicebearStyle = "shapes";
-      if (style.includes("tech")) dicebearStyle = "bottts";
-      else if (style.includes("corporate")) dicebearStyle = "initials";
-      else if (style.includes("retro")) dicebearStyle = "rings";
-      else if (style.includes("playful")) dicebearStyle = "fun-emoji";
-
-      const seedName = encodeURIComponent(name + "-" + seed);
-      
-      // Construir URL de la API de Dicebear (rápida, gratuita y estable para generar SVG vectoriales)
-      currentLogoUrl = "https://api.dicebear.com/9.x/" + dicebearStyle + "/svg?seed=" + seedName;
-
-      logoPreviewImg.onload = () => {
-        logoLoading.classList.add('hidden');
-        logoLoading.classList.remove('flex');
-        logoResult.classList.remove('hidden');
-        logoResult.classList.add('flex');
-      };
-
-      logoPreviewImg.onerror = () => {
-        alert("Hubo un error al generar el logo. Por favor, intenta de nuevo.");
-        logoForm.style.display = 'block';
-        logoLoading.classList.add('hidden');
-        logoLoading.classList.remove('flex');
-      };
-
-      logoPreviewImg.src = currentLogoUrl;
-    }
-
-    function applyAILogo() {
-      if (!currentLogoUrl) return;
-      
-      const logoContainers = document.querySelectorAll('.logo-img');
-      logoContainers.forEach(container => {
-        const newImg = document.createElement('img');
-        newImg.src = currentLogoUrl;
-        newImg.alt = "AI Generated Logo";
-        
-        if (container.tagName.toLowerCase() === 'img') {
-          newImg.className = container.className;
-          container.parentNode.replaceChild(newImg, container);
-        } else {
-          newImg.className = "h-10 object-contain logo-img";
-          container.parentNode.replaceChild(newImg, container);
-        }
-      });
-      
-      closeLogoModal();
-    }
   </script>
 </body>
 </html>
@@ -825,6 +676,34 @@ Quiero que mejores y reescribas los textos de mi Landing Page para que sea "de o
                   </label>
                 )}
                 <p className="text-[10px] text-slate-500 flex-1">El logo se mostrará en la barra de navegación en lugar del icono predeterminado.</p>
+              </div>
+
+              {/* AI Logo Generator UI */}
+              <div className="pt-4 border-t border-slate-700/50 mt-4">
+                <label className="block text-xs font-medium text-slate-400 mb-2 flex items-center gap-2">
+                  <Wand2 size={12} className="text-indigo-400" />
+                  ¿No tienes logo? Genéralo con IA
+                </label>
+                <div className="flex gap-2">
+                  <select 
+                    value={logoStyle}
+                    onChange={(e) => setLogoStyle(e.target.value)}
+                    className="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-2 py-2 text-xs focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all text-slate-300"
+                  >
+                    <option value="shapes">Abstracto / Geométrico</option>
+                    <option value="bottts">Robot / Tecnológico</option>
+                    <option value="initials">Corporativo (Iniciales)</option>
+                    <option value="rings">Retro / Anillos</option>
+                    <option value="fun-emoji">Divertido / Emoji</option>
+                  </select>
+                  <button 
+                    onClick={handleGenerateLogo}
+                    disabled={isGeneratingLogo}
+                    className="bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white px-3 py-2 rounded-lg text-xs font-bold flex items-center justify-center gap-1 transition-colors"
+                  >
+                    {isGeneratingLogo ? <Loader2 size={12} className="animate-spin" /> : 'Generar'}
+                  </button>
+                </div>
               </div>
             </div>
 
