@@ -26,11 +26,18 @@ const colorThemes: Record<string, { primary: string, bg: string, text: string, b
 
 export default function LandingPageGenerator() {
   // Core Data States
+  const [heroBadge, setHeroBadge] = useState('NUEVO LANZAMIENTO');
   const [businessName, setBusinessName] = useState('Empresa Acme');
   const [valueProposition, setValueProposition] = useState('Potencia tu productividad con IA');
-  const [heroDescription, setHeroDescription] = useState('Descubre cómo Empresa Acme puede ayudarte a alcanzar tus metas más rápido y fácil que nunca. Únete a miles de clientes satisfechos.');
+  const [heroSubtitle, setHeroSubtitle] = useState('Descubre cómo Empresa Acme puede ayudarte a alcanzar tus metas más rápido y fácil que nunca.');
   const [targetAudience, setTargetAudience] = useState('Profesionales y Equipos');
   const [ctaText, setCtaText] = useState('Comenzar Gratis');
+  const [ctaSecondaryText, setCtaSecondaryText] = useState('Saber Más');
+  const [keyBenefits, setKeyBenefits] = useState([
+    'Implementación en minutos',
+    'Seguridad de grado empresarial',
+    'Soporte técnico 24/7'
+  ]);
   const [colorPalette, setColorPalette] = useState('blue');
 
   // Dynamic Content States
@@ -158,7 +165,7 @@ El SVG debe ser limpio, moderno, escalable, con viewBox="0 0 512 512". Debe incl
 Tengo una empresa llamada "${businessName}" orientada a "${targetAudience}".
 Mi idea base es: "${valueProposition}".
 
-Quiero que mejores y reescribas los textos de mi Landing Page para que sea "de otro mundo", muy persuasiva, profesional y que genere altas conversiones.`;
+Quiero que mejores y reescribas los textos de mi Landing Page para que sea "de otro mundo", muy persuasiva, profesional y que genere altas conversiones. Presta mucha atención a la nueva jerarquía CRO: Título principal corto (máx 8 palabras), subtítulo conciso (máx 150 caracteres), y 3 beneficios clave directos (máx 80 caracteres cada uno).`;
 
       if (productImages.length > 0) {
         promptText += `\n\nATENCIÓN ESPECIAL: Te he adjuntado imágenes de mi producto/servicio. Analízalas cuidadosamente e infiere exactamente de qué trata el negocio. Escribe una sección visual exclusiva basada en lo que ves. Debes completar los campos "imageSectionTitle" y "imageSectionText" en el JSON, describiendo lo que se muestra en las fotos de forma extremadamente atractiva para el cliente.`;
@@ -186,9 +193,15 @@ Quiero que mejores y reescribas los textos de mi Landing Page para que sea "de o
             responseSchema: {
               type: "object",
               properties: {
+                heroBadge: { type: "string" },
                 valueProposition: { type: "string" },
-                heroDescription: { type: "string" },
+                heroSubtitle: { type: "string" },
                 ctaText: { type: "string" },
+                ctaSecondaryText: { type: "string" },
+                keyBenefits: {
+                  type: "array",
+                  items: { type: "string" }
+                },
                 featuresTitle: { type: "string" },
                 features: {
                   type: "array",
@@ -206,7 +219,7 @@ Quiero que mejores y reescribas los textos de mi Landing Page para que sea "de o
                 imageSectionTitle: { type: "string" },
                 imageSectionText: { type: "string" }
               },
-              required: ["valueProposition", "heroDescription", "ctaText", "featuresTitle", "features", "testimonialText", "testimonialAuthor", "testimonialRole"]
+              required: ["heroBadge", "valueProposition", "heroSubtitle", "ctaText", "ctaSecondaryText", "keyBenefits", "featuresTitle", "features", "testimonialText", "testimonialAuthor", "testimonialRole"]
             }
           }
         })
@@ -218,11 +231,19 @@ Quiero que mejores y reescribas los textos de mi Landing Page para que sea "de o
       const resultText = data.candidates[0].content.parts[0].text;
       const enhancedContent = JSON.parse(resultText);
 
+      setHeroBadge(enhancedContent.heroBadge);
       setValueProposition(enhancedContent.valueProposition);
-      setHeroDescription(enhancedContent.heroDescription);
+      setHeroSubtitle(enhancedContent.heroSubtitle);
       setCtaText(enhancedContent.ctaText);
-      setFeaturesTitle(enhancedContent.featuresTitle);
+      setCtaSecondaryText(enhancedContent.ctaSecondaryText);
       
+      const enhancedBenefits = enhancedContent.keyBenefits.slice(0, 3);
+      while(enhancedBenefits.length < 3) {
+        enhancedBenefits.push("Beneficio Clave");
+      }
+      setKeyBenefits(enhancedBenefits);
+
+      setFeaturesTitle(enhancedContent.featuresTitle);
       const enhancedFeatures = enhancedContent.features.slice(0, 3);
       while(enhancedFeatures.length < 3) {
         enhancedFeatures.push({ title: "Característica", description: "Descripción..."});
@@ -252,9 +273,9 @@ Quiero que mejores y reescribas los textos de mi Landing Page para que sea "de o
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${businessName} - ${valueProposition}</title>
-  <meta name="description" content="${heroDescription}">
+  <meta name="description" content="${heroSubtitle}">
   <meta property="og:title" content="${businessName} - ${valueProposition}">
-  <meta property="og:description" content="${heroDescription}">
+  <meta property="og:description" content="${heroSubtitle}">
   <meta property="og:type" content="website">
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -293,15 +314,43 @@ Quiero que mejores y reescribas los textos de mi Landing Page para que sea "de o
   </div>
 
   <!-- Hero Section -->
-  <section class="w-full py-24 px-6 md:px-12 md:py-36 flex flex-col items-center text-center ${theme.bg} relative overflow-hidden">
+  <section class="w-full pt-24 pb-16 px-6 md:px-12 md:pt-32 md:pb-20 flex flex-col items-center text-center ${theme.bg} relative overflow-hidden">
     <div class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay"></div>
-    <div class="relative z-10 flex flex-col items-center">
-      <span class="px-4 py-1.5 text-xs font-bold rounded-full bg-white shadow-sm border ${theme.border} mb-8 uppercase tracking-widest ${theme.primary}">Especial para ${targetAudience}</span>
-      <h1 class="text-5xl md:text-7xl font-black tracking-tight max-w-5xl leading-[1.1] mb-8 text-slate-900">${valueProposition}</h1>
-      <p class="text-xl md:text-2xl text-slate-600 max-w-3xl mb-12 font-medium leading-relaxed">${heroDescription}</p>
-      <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+    <div class="relative z-10 flex flex-col items-center w-full max-w-5xl">
+      <span class="px-4 py-1.5 text-xs font-bold rounded-full bg-white/80 backdrop-blur shadow-sm border ${theme.border} mb-8 uppercase tracking-widest ${theme.primary}">${heroBadge}</span>
+      
+      <h1 class="text-5xl md:text-6xl lg:text-7xl font-black tracking-tight max-w-4xl leading-[1.1] mb-6 text-slate-900">
+        ${valueProposition}
+      </h1>
+      
+      <p class="text-lg md:text-xl text-slate-600 max-w-2xl mb-10 font-medium leading-relaxed">
+        ${heroSubtitle}
+      </p>
+      
+      <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto mb-16">
         <button onclick="openModal()" class="px-8 py-4 text-lg font-bold rounded-full shadow-xl transition-all transform hover:-translate-y-1 hover:shadow-2xl ${theme.button} w-full sm:w-auto">${ctaText}</button>
-        <button onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})" class="px-8 py-4 text-lg font-bold rounded-full bg-white text-slate-900 border-2 border-slate-200 shadow-sm transition-all hover:bg-slate-50 hover:border-slate-300 w-full sm:w-auto">Saber Más</button>
+        <button onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})" class="px-8 py-4 text-lg font-bold rounded-full bg-white/80 backdrop-blur text-slate-900 border-2 border-slate-200 shadow-sm transition-all hover:bg-white hover:border-slate-300 w-full sm:w-auto">${ctaSecondaryText}</button>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-5xl">
+        <div class="flex items-center gap-4 text-left p-4 rounded-2xl bg-white/50 backdrop-blur border border-slate-200/50">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center bg-white shadow-sm shrink-0 ${theme.primary}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+          <span class="font-semibold text-slate-800 text-sm md:text-base leading-tight">${keyBenefits[0]}</span>
+        </div>
+        <div class="flex items-center gap-4 text-left p-4 rounded-2xl bg-white/50 backdrop-blur border border-slate-200/50">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center bg-white shadow-sm shrink-0 ${theme.primary}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+          </div>
+          <span class="font-semibold text-slate-800 text-sm md:text-base leading-tight">${keyBenefits[1]}</span>
+        </div>
+        <div class="flex items-center gap-4 text-left p-4 rounded-2xl bg-white/50 backdrop-blur border border-slate-200/50">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center bg-white shadow-sm shrink-0 ${theme.primary}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          </div>
+          <span class="font-semibold text-slate-800 text-sm md:text-base leading-tight">${keyBenefits[2]}</span>
+        </div>
       </div>
     </div>
   </section>
@@ -747,12 +796,56 @@ Quiero que mejores y reescribas los textos de mi Landing Page para que sea "de o
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-400 mb-1">Propuesta de Valor (Base)</label>
-              <textarea 
+              <label className="block text-xs font-medium text-slate-400 mb-1">Etiqueta Superior (Badge)</label>
+              <input 
+                type="text" 
+                maxLength={30}
+                value={heroBadge}
+                onChange={(e) => setHeroBadge(e.target.value)}
+                placeholder="Ej. NUEVA SOLUCIÓN"
+                className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all uppercase"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-medium text-slate-400 mb-1">Propuesta de Valor (H1 - máx 8 palabras)</label>
+              <input 
+                type="text"
                 value={valueProposition}
                 onChange={(e) => setValueProposition(e.target.value)}
+                className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-medium text-slate-400 mb-1">Subtítulo Corto (máx 150 caracteres)</label>
+              <textarea 
+                maxLength={150}
+                value={heroSubtitle}
+                onChange={(e) => setHeroSubtitle(e.target.value)}
                 className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all resize-none h-16"
               />
+            </div>
+
+            <div>
+              <label className="block text-xs font-medium text-slate-400 mb-1">3 Beneficios Clave (máx 80 caracteres c/u)</label>
+              <div className="space-y-2">
+                {[0, 1, 2].map(idx => (
+                  <input 
+                    key={idx}
+                    type="text"
+                    maxLength={80}
+                    value={keyBenefits[idx] || ''}
+                    onChange={(e) => {
+                      const newBenefits = [...keyBenefits];
+                      newBenefits[idx] = e.target.value;
+                      setKeyBenefits(newBenefits);
+                    }}
+                    placeholder={`Beneficio ${idx + 1}`}
+                    className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-xs focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
+                  />
+                ))}
+              </div>
             </div>
 
             <div>
@@ -765,14 +858,25 @@ Quiero que mejores y reescribas los textos de mi Landing Page para que sea "de o
               />
             </div>
             
-            <div>
-              <label className="block text-xs font-medium text-slate-400 mb-1">Llamado a la Acción (CTA)</label>
-              <input 
-                type="text" 
-                value={ctaText}
-                onChange={(e) => setCtaText(e.target.value)}
-                className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
-              />
+            <div className="flex gap-2">
+              <div className="flex-1">
+                <label className="block text-xs font-medium text-slate-400 mb-1">CTA Principal</label>
+                <input 
+                  type="text" 
+                  value={ctaText}
+                  onChange={(e) => setCtaText(e.target.value)}
+                  className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
+                />
+              </div>
+              <div className="flex-1">
+                <label className="block text-xs font-medium text-slate-400 mb-1">CTA Secundario</label>
+                <input 
+                  type="text" 
+                  value={ctaSecondaryText}
+                  onChange={(e) => setCtaSecondaryText(e.target.value)}
+                  className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
+                />
+              </div>
             </div>
           </div>
 
