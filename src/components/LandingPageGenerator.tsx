@@ -181,7 +181,6 @@ Quiero que mejores y reescribas los textos de mi Landing Page para que sea "de o
     }
   };
 
-  // Helper to generate the exact HTML string for the preview
   const generateHTML = () => {
     return `
 <!DOCTYPE html>
@@ -190,11 +189,15 @@ Quiero que mejores y reescribas los textos de mi Landing Page para que sea "de o
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${businessName} - ${valueProposition}</title>
+  <meta name="description" content="${heroDescription}">
+  <meta property="og:title" content="${businessName} - ${valueProposition}">
+  <meta property="og:description" content="${heroDescription}">
+  <meta property="og:type" content="website">
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="font-sans antialiased text-slate-900 bg-white">
   <!-- Navigation -->
-  <header class="w-full py-4 px-6 md:px-12 flex items-center justify-between border-b ${theme.border} bg-white sticky top-0 z-50">
+  <header class="w-full py-4 px-6 md:px-12 flex items-center justify-between border-b ${theme.border} bg-white sticky top-0 z-40">
     <div class="flex items-center gap-3">
       ${logoBase64 
         ? `<img src="${logoBase64}" alt="Logo" class="h-10 object-contain" />`
@@ -207,10 +210,25 @@ Quiero que mejores y reescribas los textos de mi Landing Page para que sea "de o
     <nav class="hidden md:flex gap-8 items-center">
       <a href="#features" class="text-sm font-semibold text-slate-600 hover:${theme.primary} transition-colors">Características</a>
       ${productImages.length > 0 ? `<a href="#gallery" class="text-sm font-semibold text-slate-600 hover:${theme.primary} transition-colors">Galería</a>` : ''}
+      <a href="#pricing" class="text-sm font-semibold text-slate-600 hover:${theme.primary} transition-colors">Precios</a>
       <a href="#testimonials" class="text-sm font-semibold text-slate-600 hover:${theme.primary} transition-colors">Testimonios</a>
-      <button class="px-5 py-2.5 text-sm font-bold rounded-full shadow-md transition-all transform hover:-translate-y-0.5 hover:shadow-lg ${theme.button}">${ctaText}</button>
+      <a href="#faq" class="text-sm font-semibold text-slate-600 hover:${theme.primary} transition-colors">FAQ</a>
+      <button onclick="openModal()" class="px-5 py-2.5 text-sm font-bold rounded-full shadow-md transition-all transform hover:-translate-y-0.5 hover:shadow-lg ${theme.button}">${ctaText}</button>
     </nav>
+    <button id="mobileMenuBtn" onclick="toggleMenu()" class="md:hidden p-2 text-slate-600 hover:text-slate-900 focus:outline-none">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+    </button>
   </header>
+
+  <!-- Mobile Menu -->
+  <div id="mobileMenu" class="hidden md:hidden fixed inset-0 z-30 bg-white pt-20 px-6 flex-col gap-6 shadow-xl border-b border-slate-200">
+    <a href="#features" onclick="toggleMenu()" class="text-lg font-semibold text-slate-800 hover:${theme.primary}">Características</a>
+    ${productImages.length > 0 ? `<a href="#gallery" onclick="toggleMenu()" class="text-lg font-semibold text-slate-800 hover:${theme.primary}">Galería</a>` : ''}
+    <a href="#pricing" onclick="toggleMenu()" class="text-lg font-semibold text-slate-800 hover:${theme.primary}">Precios</a>
+    <a href="#testimonials" onclick="toggleMenu()" class="text-lg font-semibold text-slate-800 hover:${theme.primary}">Testimonios</a>
+    <a href="#faq" onclick="toggleMenu()" class="text-lg font-semibold text-slate-800 hover:${theme.primary}">Preguntas Frecuentes</a>
+    <button onclick="openModal(); toggleMenu()" class="mt-4 px-6 py-4 text-base font-bold rounded-xl shadow-lg ${theme.button} w-full">${ctaText}</button>
+  </div>
 
   <!-- Hero Section -->
   <section class="w-full py-24 px-6 md:px-12 md:py-36 flex flex-col items-center text-center ${theme.bg} relative overflow-hidden">
@@ -220,8 +238,8 @@ Quiero que mejores y reescribas los textos de mi Landing Page para que sea "de o
       <h1 class="text-5xl md:text-7xl font-black tracking-tight max-w-5xl leading-[1.1] mb-8 text-slate-900">${valueProposition}</h1>
       <p class="text-xl md:text-2xl text-slate-600 max-w-3xl mb-12 font-medium leading-relaxed">${heroDescription}</p>
       <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-        <button class="px-8 py-4 text-lg font-bold rounded-full shadow-xl transition-all transform hover:-translate-y-1 hover:shadow-2xl ${theme.button} w-full sm:w-auto">${ctaText}</button>
-        <button class="px-8 py-4 text-lg font-bold rounded-full bg-white text-slate-900 border-2 border-slate-200 shadow-sm transition-all hover:bg-slate-50 hover:border-slate-300 w-full sm:w-auto">Saber Más</button>
+        <button onclick="openModal()" class="px-8 py-4 text-lg font-bold rounded-full shadow-xl transition-all transform hover:-translate-y-1 hover:shadow-2xl ${theme.button} w-full sm:w-auto">${ctaText}</button>
+        <button onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})" class="px-8 py-4 text-lg font-bold rounded-full bg-white text-slate-900 border-2 border-slate-200 shadow-sm transition-all hover:bg-slate-50 hover:border-slate-300 w-full sm:w-auto">Saber Más</button>
       </div>
     </div>
   </section>
@@ -277,7 +295,7 @@ Quiero que mejores y reescribas los textos de mi Landing Page para que sea "de o
              <span class="font-medium text-slate-700">Diseño Excepcional</span>
           </li>
         </ul>
-        <button class="px-8 py-4 text-lg font-bold rounded-full shadow-lg transition-all transform hover:-translate-y-1 hover:shadow-xl ${theme.button}">${ctaText}</button>
+        <button onclick="openModal()" class="px-8 py-4 text-lg font-bold rounded-full shadow-lg transition-all transform hover:-translate-y-1 hover:shadow-xl ${theme.button}">${ctaText}</button>
       </div>
       <div class="flex-1 w-full grid grid-cols-2 gap-4">
         ${productImages.map((img, i) => `
@@ -289,6 +307,53 @@ Quiero que mejores y reescribas los textos de mi Landing Page para que sea "de o
     </div>
   </section>
   ` : ''}
+
+  <!-- Pricing Section -->
+  <section id="pricing" class="w-full py-24 px-6 md:px-12 bg-white border-t border-slate-100">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl md:text-5xl font-black tracking-tight mb-4">Planes Simples y Transparentes</h2>
+        <p class="text-xl text-slate-600">Comienza gratis y mejora cuando tu negocio lo necesite.</p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-8 items-center">
+        <!-- Basic -->
+        <div class="p-8 rounded-3xl border border-slate-200 bg-white flex flex-col h-full">
+          <h3 class="text-xl font-bold mb-2">Básico</h3>
+          <p class="text-slate-500 mb-6 text-sm">Perfecto para empezar</p>
+          <div class="text-4xl font-black mb-8">$0<span class="text-lg text-slate-400 font-medium">/mes</span></div>
+          <ul class="space-y-4 mb-8 flex-1">
+            <li class="flex items-center gap-2 text-sm text-slate-700"><svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Acceso a características base</li>
+            <li class="flex items-center gap-2 text-sm text-slate-700"><svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Soporte de la comunidad</li>
+          </ul>
+          <button onclick="openModal()" class="w-full py-3 px-4 font-bold rounded-xl border-2 border-slate-200 text-slate-700 hover:bg-slate-50 transition-colors">Comenzar Gratis</button>
+        </div>
+        <!-- Pro -->
+        <div class="p-8 rounded-3xl border-2 ${theme.border} ${theme.bg} flex flex-col h-full relative transform md:-translate-y-4 shadow-xl">
+          <div class="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full text-xs font-bold text-white uppercase tracking-wider ${theme.button}">Más Popular</div>
+          <h3 class="text-xl font-bold mb-2 text-slate-900">Pro</h3>
+          <p class="text-slate-600 mb-6 text-sm">Para equipos en crecimiento</p>
+          <div class="text-4xl font-black mb-8 text-slate-900">$29<span class="text-lg text-slate-500 font-medium">/mes</span></div>
+          <ul class="space-y-4 mb-8 flex-1">
+            <li class="flex items-center gap-2 text-sm text-slate-800"><svg class="w-5 h-5 ${theme.primary}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Todo lo del plan Básico</li>
+            <li class="flex items-center gap-2 text-sm text-slate-800"><svg class="w-5 h-5 ${theme.primary}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Funciones Premium</li>
+            <li class="flex items-center gap-2 text-sm text-slate-800"><svg class="w-5 h-5 ${theme.primary}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Soporte Prioritario 24/7</li>
+          </ul>
+          <button onclick="openModal()" class="w-full py-3 px-4 font-bold rounded-xl shadow-md transition-transform hover:-translate-y-1 ${theme.button}">Obtener Pro</button>
+        </div>
+        <!-- Enterprise -->
+        <div class="p-8 rounded-3xl border border-slate-200 bg-white flex flex-col h-full">
+          <h3 class="text-xl font-bold mb-2">Enterprise</h3>
+          <p class="text-slate-500 mb-6 text-sm">Para grandes empresas</p>
+          <div class="text-4xl font-black mb-8 text-slate-900">A medida</div>
+          <ul class="space-y-4 mb-8 flex-1">
+            <li class="flex items-center gap-2 text-sm text-slate-700"><svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Infraestructura dedicada</li>
+            <li class="flex items-center gap-2 text-sm text-slate-700"><svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> SLAs Personalizados</li>
+          </ul>
+          <button onclick="openModal()" class="w-full py-3 px-4 font-bold rounded-xl border-2 border-slate-200 text-slate-700 hover:bg-slate-50 transition-colors">Contactar Ventas</button>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- Testimonials Section -->
   <section id="testimonials" class="w-full py-24 px-6 md:px-12 ${theme.bg}">
@@ -315,13 +380,52 @@ Quiero que mejores y reescribas los textos de mi Landing Page para que sea "de o
     </div>
   </section>
 
+  <!-- FAQ Section -->
+  <section id="faq" class="w-full py-24 px-6 md:px-12 bg-white">
+    <div class="max-w-3xl mx-auto">
+      <h2 class="text-4xl font-black mb-12 text-center tracking-tight">Preguntas Frecuentes</h2>
+      <div class="space-y-4">
+        <!-- FAQ Item 1 -->
+        <div class="border border-slate-200 rounded-2xl overflow-hidden transition-all bg-white hover:border-slate-300 shadow-sm">
+          <button class="faq-btn w-full px-6 py-5 flex items-center justify-between text-left focus:outline-none">
+            <span class="font-bold text-lg text-slate-800">¿Ofrecen un periodo de prueba gratuito?</span>
+            <svg class="faq-icon w-5 h-5 text-slate-500 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+          </button>
+          <div class="faq-content max-h-0 overflow-hidden transition-all duration-300 ease-in-out bg-slate-50">
+            <p class="px-6 pb-5 pt-2 text-slate-600">Sí, ofrecemos una prueba de 14 días completamente gratuita en nuestro plan Pro. No necesitas ingresar tarjeta de crédito para comenzar.</p>
+          </div>
+        </div>
+        <!-- FAQ Item 2 -->
+        <div class="border border-slate-200 rounded-2xl overflow-hidden transition-all bg-white hover:border-slate-300 shadow-sm">
+          <button class="faq-btn w-full px-6 py-5 flex items-center justify-between text-left focus:outline-none">
+            <span class="font-bold text-lg text-slate-800">¿Puedo cancelar mi suscripción en cualquier momento?</span>
+            <svg class="faq-icon w-5 h-5 text-slate-500 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+          </button>
+          <div class="faq-content max-h-0 overflow-hidden transition-all duration-300 ease-in-out bg-slate-50">
+            <p class="px-6 pb-5 pt-2 text-slate-600">Absolutamente. Entendemos que las necesidades cambian. Puedes cancelar o pausar tu suscripción directamente desde tu panel de control sin preguntas adicionales.</p>
+          </div>
+        </div>
+        <!-- FAQ Item 3 -->
+        <div class="border border-slate-200 rounded-2xl overflow-hidden transition-all bg-white hover:border-slate-300 shadow-sm">
+          <button class="faq-btn w-full px-6 py-5 flex items-center justify-between text-left focus:outline-none">
+            <span class="font-bold text-lg text-slate-800">¿Qué tipo de soporte técnico incluyen?</span>
+            <svg class="faq-icon w-5 h-5 text-slate-500 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+          </button>
+          <div class="faq-content max-h-0 overflow-hidden transition-all duration-300 ease-in-out bg-slate-50">
+            <p class="px-6 pb-5 pt-2 text-slate-600">Todos los planes incluyen soporte por correo electrónico. El plan Pro añade soporte por chat prioritario y el plan Enterprise cuenta con un gerente de cuenta dedicado disponible 24/7.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- CTA Section -->
   <section class="w-full py-24 px-6 md:px-12 bg-slate-900 text-white text-center relative overflow-hidden">
     <div class="absolute inset-0 opacity-10 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white via-slate-900 to-slate-900"></div>
     <div class="relative z-10 max-w-3xl mx-auto flex flex-col items-center">
       <h2 class="text-4xl md:text-5xl font-black mb-6">¿Listo para empezar?</h2>
       <p class="text-xl text-slate-400 mb-10">Únete hoy y descubre el potencial de tu negocio.</p>
-      <button class="px-10 py-5 text-xl font-bold rounded-full shadow-2xl transition-all transform hover:scale-105 ${theme.button}">${ctaText}</button>
+      <button onclick="openModal()" class="px-10 py-5 text-xl font-bold rounded-full shadow-2xl transition-all transform hover:scale-105 ${theme.button}">${ctaText}</button>
     </div>
   </section>
 
@@ -343,6 +447,117 @@ Quiero que mejores y reescribas los textos de mi Landing Page para que sea "de o
     </div>
     <p class="text-slate-400 text-sm">© 2026 ${businessName}. Todos los derechos reservados.</p>
   </footer>
+
+  <!-- Lead Capture Modal -->
+  <div id="leadModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full p-8 transform scale-95 transition-transform duration-300" id="modalContent">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="text-2xl font-black text-slate-900">Crea tu cuenta gratis</h3>
+        <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-full p-2 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <p class="text-slate-500 mb-8">Únete a cientos de usuarios satisfechos. Toma menos de 1 minuto.</p>
+      
+      <form id="leadForm" class="space-y-5">
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-2">Nombre completo</label>
+          <input type="text" required placeholder="Ej. Juan Pérez" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all">
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-2">Correo electrónico profesional</label>
+          <input type="email" required placeholder="tu@empresa.com" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all">
+        </div>
+        <button type="submit" class="w-full py-4 text-lg font-bold rounded-xl shadow-lg transition-transform hover:-translate-y-1 mt-4 flex items-center justify-center gap-2 ${theme.button}">
+          Crear mi cuenta gratuita
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+        </button>
+      </form>
+      <div id="successMsg" class="hidden flex-col items-center justify-center py-8 text-center animate-pulse">
+        <div class="w-16 h-16 bg-green-100 text-green-500 rounded-full flex items-center justify-center mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </div>
+        <h4 class="text-xl font-bold text-slate-900 mb-2">¡Todo listo!</h4>
+        <p class="text-slate-500">Revisa tu bandeja de entrada en breve.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Mobile Menu Toggle
+    const mobileMenu = document.getElementById('mobileMenu');
+    function toggleMenu() {
+      if (mobileMenu.classList.contains('hidden')) {
+        mobileMenu.classList.remove('hidden');
+        mobileMenu.classList.add('flex');
+      } else {
+        mobileMenu.classList.add('hidden');
+        mobileMenu.classList.remove('flex');
+      }
+    }
+
+    // Modal Logic
+    const modal = document.getElementById('leadModal');
+    const modalContent = document.getElementById('modalContent');
+    const leadForm = document.getElementById('leadForm');
+    const successMsg = document.getElementById('successMsg');
+
+    function openModal() {
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+      modalContent.classList.remove('scale-95');
+      modalContent.classList.add('scale-100');
+    }
+
+    function closeModal() {
+      modal.classList.add('opacity-0', 'pointer-events-none');
+      modalContent.classList.remove('scale-100');
+      modalContent.classList.add('scale-95');
+      setTimeout(() => {
+        leadForm.reset();
+        leadForm.style.display = 'block';
+        successMsg.classList.add('hidden');
+        successMsg.classList.remove('flex');
+      }, 300);
+    }
+
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+
+    leadForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      leadForm.style.display = 'none';
+      successMsg.classList.remove('hidden');
+      successMsg.classList.add('flex');
+      setTimeout(() => {
+        closeModal();
+      }, 3000);
+    });
+
+    // FAQs Accordion
+    const faqBtns = document.querySelectorAll('.faq-btn');
+    faqBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const content = btn.nextElementSibling;
+        const icon = btn.querySelector('.faq-icon');
+        
+        faqBtns.forEach(otherBtn => {
+          if (otherBtn !== btn) {
+            otherBtn.nextElementSibling.style.maxHeight = null;
+            otherBtn.querySelector('.faq-icon').style.transform = 'rotate(0deg)';
+          }
+        });
+
+        if (content.style.maxHeight) {
+          content.style.maxHeight = null;
+          icon.style.transform = 'rotate(0deg)';
+        } else {
+          content.style.maxHeight = content.scrollHeight + "px";
+          icon.style.transform = 'rotate(180deg)';
+        }
+      });
+    });
+  </script>
 </body>
 </html>
     `;
