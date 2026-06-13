@@ -61,17 +61,63 @@ export default function LandingPageGenerator() {
 
   const theme = colorThemes[colorPalette] || colorThemes['blue'];
 
-  const handleGenerateLogo = () => {
+  const handleGenerateLogo = async () => {
+    if (!apiKey) {
+      alert("Para generar un logo inteligente basado en tu marca, ingresa tu API Key de Gemini en la sección 'IA Enhancer'. Usaremos un logo abstracto genérico temporalmente.");
+      setIsGeneratingLogo(true);
+      const seed = Math.floor(Math.random() * 1000000);
+      const seedName = encodeURIComponent((businessName || 'Brand') + "-" + seed);
+      const url = `https://api.dicebear.com/9.x/${logoStyle}/svg?seed=${seedName}`;
+      setTimeout(() => {
+        setLogoBase64(url);
+        setIsGeneratingLogo(false);
+      }, 600);
+      return;
+    }
+
     setIsGeneratingLogo(true);
-    const seed = Math.floor(Math.random() * 1000000);
-    const seedName = encodeURIComponent((businessName || 'Brand') + "-" + seed);
-    const url = `https://api.dicebear.com/9.x/${logoStyle}/svg?seed=${seedName}`;
-    
-    // Simulate slight loading delay for UX
-    setTimeout(() => {
+    try {
+      const promptText = `Actúa como un diseñador gráfico experto. Crea el código de un logotipo en formato SVG (SOLO el código XML, sin markdown, sin backticks \`\`\`, sin explicaciones) para mi empresa. 
+Nombre de la empresa: "${businessName}"
+Estilo deseado: "${logoStyle}" (aplica este concepto visual)
+Propuesta de valor / Identidad: "${valueProposition}"
+Color principal sugerido: Un color que combine con la paleta actual (paleta seleccionada: ${colorPalette}).
+
+El SVG debe ser limpio, moderno, escalable, con viewBox="0 0 512 512". Debe incluir el nombre de la empresa escrito de forma muy legible y estética, y un isotipo o símbolo creativo que represente la identidad y el valor de la marca. NO incluyas imágenes rasterizadas, solo usa paths, rectángulos, círculos, textos y degradados. Tu respuesta debe ser EXCLUSIVAMENTE el texto <svg>...</svg>.`;
+
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: promptText }] }],
+        })
+      });
+
+      if (!response.ok) throw new Error("Error en la API de Gemini");
+
+      const data = await response.json();
+      let svgCode = data.candidates?.[0]?.content?.parts?.[0]?.text;
+      
+      if (!svgCode) throw new Error("Respuesta vacía");
+
+      // Limpiar formato markdown si Gemini lo añadió
+      svgCode = svgCode.replace(/```xml/g, '').replace(/```svg/g, '').replace(/```html/g, '').replace(/```/g, '').trim();
+
+      // Convertir SVG a Data URI
+      const encodedSvg = btoa(unescape(encodeURIComponent(svgCode)));
+      const dataUri = `data:image/svg+xml;base64,${encodedSvg}`;
+      
+      setLogoBase64(dataUri);
+    } catch (error) {
+      console.error(error);
+      alert("Hubo un error al diseñar el logo con IA. Asegúrate de que la API Key sea válida. Usaremos un generador básico.");
+      const seed = Math.floor(Math.random() * 1000000);
+      const seedName = encodeURIComponent((businessName || 'Brand') + "-" + seed);
+      const url = `https://api.dicebear.com/9.x/${logoStyle}/svg?seed=${seedName}`;
       setLogoBase64(url);
+    } finally {
       setIsGeneratingLogo(false);
-    }, 600);
+    }
   };
 
   const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
