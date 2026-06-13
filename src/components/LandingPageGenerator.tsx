@@ -1,19 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
   Palette, 
-  LayoutTemplate, 
   Rocket, 
   Settings, 
-  Users, 
   Download, 
   Copy, 
-  CheckCircle,
-  Star,
-  Shield,
-  Zap,
-  Box,
-  TrendingUp,
-  Gift,
   Wand2,
   Key,
   Loader2,
@@ -30,11 +21,7 @@ const colorThemes: Record<string, { primary: string, bg: string, text: string, b
   gray: { primary: 'text-slate-800', bg: 'bg-slate-50', text: 'text-slate-900', button: 'bg-slate-800 hover:bg-slate-900 text-white', border: 'border-slate-200' },
 };
 
-const templates: Record<string, { name: string, icons: any[] }> = {
-  saas: { name: 'SaaS', icons: [Zap, Shield, TrendingUp] },
-  product: { name: 'Producto Físico', icons: [Box, Star, Gift] },
-  leadgen: { name: 'Captación de Leads', icons: [Users, Settings, Rocket] }
-};
+
 
 export default function LandingPageGenerator() {
   // Core Data States
@@ -44,7 +31,6 @@ export default function LandingPageGenerator() {
   const [targetAudience, setTargetAudience] = useState('Profesionales y Equipos');
   const [ctaText, setCtaText] = useState('Comenzar Gratis');
   const [colorPalette, setColorPalette] = useState('blue');
-  const [template, setTemplate] = useState('saas');
 
   // Dynamic Content States
   const [featuresTitle, setFeaturesTitle] = useState('Funcionalidades Potentes para Equipos Modernos');
@@ -69,7 +55,6 @@ export default function LandingPageGenerator() {
   const [isGenerating, setIsGenerating] = useState(false);
 
   const theme = colorThemes[colorPalette] || colorThemes['blue'];
-  const tpl = templates[template] || templates['saas'];
 
   const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
