@@ -384,37 +384,8 @@ Quiero que mejores y reescribas los textos de mi Landing Page para que sea "de o
   <section id="faq" class="w-full py-24 px-6 md:px-12 bg-white">
     <div class="max-w-3xl mx-auto">
       <h2 class="text-4xl font-black mb-12 text-center tracking-tight">Preguntas Frecuentes</h2>
-      <div class="space-y-4">
-        <!-- FAQ Item 1 -->
-        <div class="border border-slate-200 rounded-2xl overflow-hidden transition-all bg-white hover:border-slate-300 shadow-sm">
-          <button class="faq-btn w-full px-6 py-5 flex items-center justify-between text-left focus:outline-none">
-            <span class="font-bold text-lg text-slate-800">¿Ofrecen un periodo de prueba gratuito?</span>
-            <svg class="faq-icon w-5 h-5 text-slate-500 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-          </button>
-          <div class="faq-content max-h-0 overflow-hidden transition-all duration-300 ease-in-out bg-slate-50">
-            <p class="px-6 pb-5 pt-2 text-slate-600">Sí, ofrecemos una prueba de 14 días completamente gratuita en nuestro plan Pro. No necesitas ingresar tarjeta de crédito para comenzar.</p>
-          </div>
-        </div>
-        <!-- FAQ Item 2 -->
-        <div class="border border-slate-200 rounded-2xl overflow-hidden transition-all bg-white hover:border-slate-300 shadow-sm">
-          <button class="faq-btn w-full px-6 py-5 flex items-center justify-between text-left focus:outline-none">
-            <span class="font-bold text-lg text-slate-800">¿Puedo cancelar mi suscripción en cualquier momento?</span>
-            <svg class="faq-icon w-5 h-5 text-slate-500 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-          </button>
-          <div class="faq-content max-h-0 overflow-hidden transition-all duration-300 ease-in-out bg-slate-50">
-            <p class="px-6 pb-5 pt-2 text-slate-600">Absolutamente. Entendemos que las necesidades cambian. Puedes cancelar o pausar tu suscripción directamente desde tu panel de control sin preguntas adicionales.</p>
-          </div>
-        </div>
-        <!-- FAQ Item 3 -->
-        <div class="border border-slate-200 rounded-2xl overflow-hidden transition-all bg-white hover:border-slate-300 shadow-sm">
-          <button class="faq-btn w-full px-6 py-5 flex items-center justify-between text-left focus:outline-none">
-            <span class="font-bold text-lg text-slate-800">¿Qué tipo de soporte técnico incluyen?</span>
-            <svg class="faq-icon w-5 h-5 text-slate-500 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-          </button>
-          <div class="faq-content max-h-0 overflow-hidden transition-all duration-300 ease-in-out bg-slate-50">
-            <p class="px-6 pb-5 pt-2 text-slate-600">Todos los planes incluyen soporte por correo electrónico. El plan Pro añade soporte por chat prioritario y el plan Enterprise cuenta con un gerente de cuenta dedicado disponible 24/7.</p>
-          </div>
-        </div>
+      <div id="faq-container" class="space-y-4">
+        <!-- Las FAQs se generarán aquí dinámicamente vía JavaScript -->
       </div>
     </div>
   </section>
@@ -534,29 +505,62 @@ Quiero que mejores y reescribas los textos de mi Landing Page para que sea "de o
       }, 3000);
     });
 
-    // FAQs Accordion
-    const faqBtns = document.querySelectorAll('.faq-btn');
-    faqBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const content = btn.nextElementSibling;
-        const icon = btn.querySelector('.faq-icon');
-        
-        faqBtns.forEach(otherBtn => {
-          if (otherBtn !== btn) {
-            otherBtn.nextElementSibling.style.maxHeight = null;
-            otherBtn.querySelector('.faq-icon').style.transform = 'rotate(0deg)';
+    // FAQs Accordion Data
+    // Para añadir o editar preguntas, simplemente modifica este array:
+    const faqs = [
+      {
+        pregunta: "¿Ofrecen un periodo de prueba gratuito?",
+        respuesta: "Sí, ofrecemos una prueba de 14 días completamente gratuita en nuestro plan Pro. No necesitas ingresar tarjeta de crédito para comenzar."
+      },
+      {
+        pregunta: "¿Puedo cancelar mi suscripción en cualquier momento?",
+        respuesta: "Absolutamente. Entendemos que las necesidades cambian. Puedes cancelar o pausar tu suscripción directamente desde tu panel de control sin preguntas adicionales."
+      },
+      {
+        pregunta: "¿Qué tipo de soporte técnico incluyen?",
+        respuesta: "Todos los planes incluyen soporte por correo electrónico. El plan Pro añade soporte por chat prioritario y el plan Enterprise cuenta con un gerente de cuenta dedicado disponible 24/7."
+      }
+    ];
+
+    const faqContainer = document.getElementById('faq-container');
+    if (faqContainer) {
+      // Generar el HTML de las FAQs dinámicamente
+      faqContainer.innerHTML = faqs.map(faq => \`
+        <div class="border border-slate-200 rounded-2xl overflow-hidden transition-all bg-white hover:border-slate-300 shadow-sm">
+          <button class="faq-btn w-full px-6 py-5 flex items-center justify-between text-left focus:outline-none">
+            <span class="font-bold text-lg text-slate-800">\${faq.pregunta}</span>
+            <svg class="faq-icon w-5 h-5 text-slate-500 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+          </button>
+          <div class="faq-content max-h-0 overflow-hidden transition-all duration-300 ease-in-out bg-slate-50">
+            <p class="px-6 pb-5 pt-2 text-slate-600">\${faq.respuesta}</p>
+          </div>
+        </div>
+      \`).join('');
+
+      // Re-vincular eventos a los nuevos botones
+      const faqBtns = document.querySelectorAll('.faq-btn');
+      faqBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const content = btn.nextElementSibling;
+          const icon = btn.querySelector('.faq-icon');
+          
+          faqBtns.forEach(otherBtn => {
+            if (otherBtn !== btn) {
+              otherBtn.nextElementSibling.style.maxHeight = null;
+              otherBtn.querySelector('.faq-icon').style.transform = 'rotate(0deg)';
+            }
+          });
+
+          if (content.style.maxHeight) {
+            content.style.maxHeight = null;
+            icon.style.transform = 'rotate(0deg)';
+          } else {
+            content.style.maxHeight = content.scrollHeight + "px";
+            icon.style.transform = 'rotate(180deg)';
           }
         });
-
-        if (content.style.maxHeight) {
-          content.style.maxHeight = null;
-          icon.style.transform = 'rotate(0deg)';
-        } else {
-          content.style.maxHeight = content.scrollHeight + "px";
-          icon.style.transform = 'rotate(180deg)';
-        }
       });
-    });
+    }
   </script>
 </body>
 </html>
